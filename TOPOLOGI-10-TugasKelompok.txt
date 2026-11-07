@@ -1,0 +1,232 @@
+=====GEDUNG A=======================
+en
+conf t
+hostname GA
+banner motd #Selamat Datang Admin EKO 1#
+no ip domain-lookup
+
+interface g3/0
+ ip address 192.168.2.1 255.255.255.248
+ no shutdown
+interface g3/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+interface g3/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+interface g3/0.30
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+interface g0/0
+ ip address 20.20.20.1 255.255.255.252
+ no shutdown
+interface g1/0
+ ip address 10.10.10.1 255.255.255.252
+ no shutdown
+
+router ospf 1
+ network 192.168.2.0 0.0.0.7 area 0
+ network 192.168.10.0 0.0.0.255 area 0
+ network 192.168.20.0 0.0.0.255 area 0
+ network 192.168.30.0 0.0.0.255 area 0
+ network 20.20.20.0 0.0.0.3 area 0
+ network 10.10.10.0 0.0.0.3 area 0
+ passive-interface g3/0
+ passive-interface g3/0.10
+ passive-interface g3/0.20
+ passive-interface g3/0.30
+
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.20.1 192.168.20.10
+ip dhcp excluded-address 192.168.30.1 192.168.30.10
+ip dhcp pool VLAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+ip dhcp pool VLAN20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 8.8.8.8
+ip dhcp pool VLAN30
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1
+ dns-server 8.8.8.8
+end
+wr
+
+
+================SWITCH GEDUNGA 
+en
+conf t
+hostname SW-GA
+vlan 10
+ name INFORMATIKA
+vlan 20
+ name TEKNIK-INDUSTRI
+vlan 30
+ name TEKNIK-MESIN
+interface range fa0/1-2
+ switchport mode access
+ switchport access vlan 10
+interface range fa0/3-4
+ switchport mode access
+ switchport access vlan 20
+interface range fa0/5-6
+ switchport mode access
+ switchport access vlan 30
+interface fa0/7
+ switchport mode access
+ switchport access vlan 1
+interface g0/1
+ switchport mode trunk
+end
+wr
+
+=======================================GEDUNG B===================================
+=========================================================================================
+(ROUTERR)
+
+en
+conf t
+hostname GB
+banner motd #Selamat Datang Admin Nama Anggota 2#
+no ip domain-lookup
+interface g3/0
+ ip address 192.168.100.1 255.255.255.0
+ no shutdown
+interface g0/0
+ ip address 20.20.20.2 255.255.255.252
+ no shutdown
+interface g1/0
+ ip address 30.30.30.1 255.255.255.252
+ no shutdown
+router ospf 1
+ network 192.168.100.0 0.0.0.255 area 0
+ network 20.20.20.0 0.0.0.3 area 0
+ network 30.30.30.0 0.0.0.3 area 0
+ passive-interface g3/0
+ip dhcp excluded-address 192.168.100.1 192.168.100.10
+ip dhcp pool GEDUNG-B
+ network 192.168.100.0 255.255.255.0
+ default-router 192.168.100.1
+ dns-server 8.8.8.8
+end
+wr
+
+
+============SWITCH GEDUNG B
+
+
+
+
+en
+conf t
+hostname SW-GB
+end
+wr
+
+
+
+
+=====================================GEDUNG C================================================
+=============================================================================================
+
+(ROUTERR)
+
+en
+conf t
+hostname GC
+banner motd #Selamat Datang Admin Nama Anggota 3#
+no ip domain-lookup
+interface g1/0
+ ip address 30.30.30.2 255.255.255.252
+ no shutdown
+interface g2/0
+ ip address 40.40.40.1 255.255.255.252
+ no shutdown
+interface g3/0
+ ip address 192.168.200.1 255.255.255.0
+ no shutdown
+router ospf 1
+ network 192.168.200.0 0.0.0.255 area 0
+ network 30.30.30.0 0.0.0.3 area 0
+ network 40.40.40.0 0.0.0.3 area 0
+ passive-interface g3/0
+ip dhcp excluded-address 192.168.200.1 192.168.200.10
+ip dhcp pool GEDUNG-C
+ network 192.168.200.0 255.255.255.0
+ default-router 192.168.200.1
+ dns-server 8.8.8.8
+end
+wr
+
+
+===============================SWIRCH GEDUNG C
+
+en
+conf t
+hostname SW-GB
+end
+wr
+
+
+================================GEDUNG D==========================================================
+===========================================================================================
+
+(ROUTER)
+
+en
+conf t
+hostname GD
+banner motd #Selamat Datang Admin Nama Anggota 4#
+no ip domain-lookup
+interface g1/0
+ ip address 10.10.10.2 255.255.255.252
+ no shutdown
+interface g2/0
+ ip address 40.40.40.2 255.255.255.252
+ no shutdown
+interface g3/0
+ ip address 172.20.21.1 255.255.0.0
+ no shutdown
+router ospf 1
+ network 172.20.0.0 0.0.255.255 area 0
+ network 10.10.10.0 0.0.0.3 area 0
+ network 40.40.40.0 0.0.0.3 area 0
+ passive-interface g3/0
+ip dhcp excluded-address 172.20.21.1 172.20.21.10
+ip dhcp pool GEDUNG-D
+ network 172.20.0.0 255.255.0.0
+ default-router 172.20.21.1
+ dns-server 8.8.8.8
+end
+wr
+
+
+======================SWICH GEDUNG D
+
+
+en
+conf t
+hostname SW-GD
+end
+wr
+
+
+
+=================================================WIRWLESS CONNECTION===========
+Gedung	     AP	        SSID
+B	Access Point0	AP-GB
+D	AP-CLASS A	CLASS-A
+D	AP-CLASS B	CLASS-B
+D	AP-CLASS C	CLASS-C
+
+================================
+
+
+en
+conf t
+banner motd #Selamat Datang Admin nama mu Anggota 1#
+end
+wr
+
